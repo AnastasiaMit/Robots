@@ -1,9 +1,9 @@
 package gui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.Rectangle;
+import java.awt.event.*;
+import java.io.*;
 
 import javax.swing.JOptionPane;
 import javax.swing.JDesktopPane;
@@ -17,39 +17,85 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+
 import log.Logger;
 
-public class MainApplicationFrame extends JFrame
-{
+
+public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
-    
+
+    public String iconified = "";
+    protected Rectangle positionGameWindow = new Rectangle();
+    protected Rectangle positionLogWindow = new Rectangle();
+    protected Rectangle positionBigWindow = new Rectangle();
+    protected LogWindow logWin;
+    protected GameWindow gameWin;
+    protected boolean deserial;
+
+
     public MainApplicationFrame() {
 
-        int inset = 50;        
+        addWindowStateListener(new WindowStateListener() {
+            public void windowStateChanged(WindowEvent arg0) {
+                iconified = frame__windowStateChanged(arg0);
+
+            }
+        });
+
+        addComponentListener (new ComponentAdapter() {
+            public void componentMoved (ComponentEvent e) {
+                positionBigWindow = getBounds();
+            }
+        });
+
+        int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setBounds(inset, inset,
-            screenSize.width  - inset*2,
-            screenSize.height - inset*2);
+                screenSize.width - inset * 2,
+                screenSize.height - inset * 2);
 
         setContentPane(desktopPane);
-        
-        
+
+
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
+        this.logWin = logWindow;
+
 
         GameWindow gameWindow = new GameWindow();
-        gameWindow.setSize(600,  600);
+        gameWindow.setSize(600, 600);
+        this.gameWin = gameWindow;
         addWindow(gameWindow);
+
+
+        deserialisation();
+        if (deserial) {
+            setBounds(positionBigWindow);
+            logWindow.setBounds(positionLogWindow);
+            gameWindow.setBounds(positionGameWindow);
+            if (iconified == "ICONIFIED") {
+                setState(Frame.ICONIFIED);
+            }
+        }
+
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
     }
 
-    protected LogWindow createLogWindow()
-    {
+
+    public String frame__windowStateChanged(WindowEvent e) {
+        if ((e.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED) {
+            return ("ICONIFIED");
+        } else if ((e.getNewState() & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH) {
+            return ("MAXIMIZED_BOTH");
+        }
+        return "";
+    }
+
+    protected LogWindow createLogWindow() {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
-        logWindow.setLocation(10,10);
+        logWindow.setLocation(10, 10);
         logWindow.setSize(300, 800);
         setMinimumSize(logWindow.getSize());
         logWindow.pack();
@@ -57,16 +103,47 @@ public class MainApplicationFrame extends JFrame
         return logWindow;
     }
 
-    protected void exitWindow(){
-        Object[] options = { "Да", "Нет" };
+    protected void exitWindow() {
+        Object[] options = {"Да", "Нет"};
         int sel = JOptionPane.showOptionDialog(null, "Вы уверены, что хотите выйти?",
                 "Выход", JOptionPane.DEFAULT_OPTION,
                 JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         if (sel == 0) {
-            System.exit(0);
+            serialisation();
+            dispose();
         }
-
     }
+
+    protected void writePositions(){
+        this.positionLogWindow = logWin.getBounds();
+        this.positionGameWindow = gameWin.getBounds();
+    }
+
+    public void serialisation() {
+
+        writePositions();
+        String positions = positionBigWindow.x + " " + positionBigWindow.y + " " + positionBigWindow.width + " " + positionBigWindow.height + "\n" +
+                positionGameWindow.x + " " + positionGameWindow.y + " " + positionGameWindow.width + " " + positionGameWindow.height + "\n" +
+                positionLogWindow.x + " " + positionLogWindow.y + " " + positionLogWindow.width + " " + positionLogWindow.height;
+        String ic = iconified;
+        String serialString = ic + "\n" + positions;
+        Serialisation ser = new Serialisation(serialString);
+        ser.SaveToFile();
+    }
+
+    public void deserialisation(){
+        Deserialisation deserial = new Deserialisation();
+        if (deserial.findFile()){
+            deserial.readfromFile();
+            iconified = deserial.iconified;
+            positionBigWindow = deserial.bigWindow;
+            positionGameWindow = deserial.gameWindow;
+            positionLogWindow = deserial.logWindow;
+            this.deserial = true;
+
+        }
+    }
+
     protected void addWindow(JInternalFrame frame)
     {
         desktopPane.add(frame);
@@ -99,7 +176,6 @@ public class MainApplicationFrame extends JFrame
 	        }); 
 	        menu.add(menuItem);
         }
-
         return menu;
 }
 
