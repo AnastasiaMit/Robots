@@ -3,7 +3,7 @@ package gui;
 import java.awt.*;
 import java.awt.Rectangle;
 import java.awt.event.*;
-import java.io.*;
+import java.beans.PropertyVetoException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JDesktopPane;
@@ -24,7 +24,9 @@ import log.Logger;
 public class MainApplicationFrame extends JFrame {
     private final JDesktopPane desktopPane = new JDesktopPane();
 
-    public String iconified = "";
+    public String iconBig;
+    public boolean iconGame;
+    public boolean iconLog;
     protected Rectangle positionGameWindow = new Rectangle();
     protected Rectangle positionLogWindow = new Rectangle();
     protected Rectangle positionBigWindow = new Rectangle();
@@ -37,13 +39,13 @@ public class MainApplicationFrame extends JFrame {
 
         addWindowStateListener(new WindowStateListener() {
             public void windowStateChanged(WindowEvent arg0) {
-                iconified = frame__windowStateChanged(arg0);
+                iconBig = frame__windowStateChanged(arg0);
 
             }
         });
 
-        addComponentListener (new ComponentAdapter() {
-            public void componentMoved (ComponentEvent e) {
+        addComponentListener(new ComponentAdapter() {
+            public void componentMoved(ComponentEvent e) {
                 positionBigWindow = getBounds();
             }
         });
@@ -73,17 +75,31 @@ public class MainApplicationFrame extends JFrame {
             setBounds(positionBigWindow);
             logWindow.setBounds(positionLogWindow);
             gameWindow.setBounds(positionGameWindow);
-            if (iconified == "ICONIFIED") {
+            if (iconBig == "ICONIFIED") {
                 setState(Frame.ICONIFIED);
             }
+
+            if (iconGame) {
+                try {
+                        gameWindow.setIcon(true);
+                } catch (PropertyVetoException e) {
+
+                }
+            }
+
+            if (iconLog) {
+                try {
+                    logWindow.setIcon(true);
+                } catch (PropertyVetoException e) {
+
+                }
+            }
+
+            setJMenuBar(generateMenuBar());
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
 
-
-        setJMenuBar(generateMenuBar());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
-
-
     public String frame__windowStateChanged(WindowEvent e) {
         if ((e.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED) {
             return ("ICONIFIED");
@@ -120,13 +136,11 @@ public class MainApplicationFrame extends JFrame {
     }
 
     public void serialisation() {
-
         writePositions();
         String positions = positionBigWindow.x + " " + positionBigWindow.y + " " + positionBigWindow.width + " " + positionBigWindow.height + "\n" +
                 positionGameWindow.x + " " + positionGameWindow.y + " " + positionGameWindow.width + " " + positionGameWindow.height + "\n" +
                 positionLogWindow.x + " " + positionLogWindow.y + " " + positionLogWindow.width + " " + positionLogWindow.height;
-        String ic = iconified;
-        String serialString = ic + "\n" + positions;
+        String serialString = iconBig + "\n" + gameWin.isIcon() + "\n" + logWin.isIcon() + "\n" + positions;
         Serialisation ser = new Serialisation(serialString);
         ser.SaveToFile();
     }
@@ -135,7 +149,9 @@ public class MainApplicationFrame extends JFrame {
         Deserialisation deserial = new Deserialisation();
         if (deserial.findFile()){
             deserial.readfromFile();
-            iconified = deserial.iconified;
+            iconBig = deserial.iconBig;
+            iconGame = deserial.iconGame;
+            iconLog = deserial.iconLog;
             positionBigWindow = deserial.bigWindow;
             positionGameWindow = deserial.gameWindow;
             positionLogWindow = deserial.logWindow;

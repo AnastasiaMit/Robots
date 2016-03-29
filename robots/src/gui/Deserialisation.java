@@ -10,7 +10,9 @@ import java.util.Scanner;
 
 public class Deserialisation {
 
-    public String iconified;
+    public String iconBig;
+    public boolean iconLog;
+    public boolean iconGame;
     public Rectangle bigWindow;
     public Rectangle logWindow;
     public Rectangle gameWindow;
@@ -40,12 +42,14 @@ public class Deserialisation {
         }
 
         String[] data = str.split("\n");
-        String[] coords = data[1].split(" ");
-        iconified = data[0];
+        String[] coords = data[3].split(" ");
+        iconBig = data[0];
+        iconGame = Boolean.valueOf(data[1]);
+        iconLog = Boolean.valueOf(data[2]);
         bigWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
-        coords = data[2].split(" ");
+        coords = data[4].split(" ");
         gameWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
-        coords = data[3].split(" ");
+        coords = data[5].split(" ");
         logWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
 }
 }
