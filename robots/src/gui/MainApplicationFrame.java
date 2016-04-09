@@ -82,17 +82,13 @@ public class MainApplicationFrame extends JFrame {
             if (iconGame) {
                 try {
                         gameWindow.setIcon(true);
-                } catch (PropertyVetoException e) {
-
-                }
+                } catch (PropertyVetoException e) {}
             }
 
             if (iconLog) {
                 try {
                     logWindow.setIcon(true);
-                } catch (PropertyVetoException e) {
-
-                }
+                } catch (PropertyVetoException e) {}
             }
 
             setJMenuBar(generateMenuBar());
@@ -126,7 +122,7 @@ public class MainApplicationFrame extends JFrame {
                 JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         if (sel == 0) {
             serialisation();
-            dispose();
+            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
 
@@ -169,26 +165,24 @@ public class MainApplicationFrame extends JFrame {
     
     protected JMenu createMenuDocument() {
    
-        JMenu menu = new JMenu("Document");
+        JMenu menu = new JMenu("Игра");
         menu.setMnemonic(KeyEvent.VK_D);
         {
-	        JMenuItem menuItem = new JMenuItem("New");
+	        JMenuItem menuItem = new JMenuItem("Новая игра");
 	        menuItem.setMnemonic(KeyEvent.VK_N);
 	        menuItem.setAccelerator(KeyStroke.getKeyStroke(
                     KeyEvent.VK_N, ActionEvent.ALT_MASK));
-	        menuItem.setActionCommand("new");
 	        menuItem.addActionListener((event) -> {
 	        }); 
 	        menu.add(menuItem);
         }
         {
-	        JMenuItem menuItem = new JMenuItem("Quit");
+	        JMenuItem menuItem = new JMenuItem("Выйти");
 	        menuItem.setMnemonic(KeyEvent.VK_Q);
 	        menuItem.setAccelerator(KeyStroke.getKeyStroke(
 	                KeyEvent.VK_Q, ActionEvent.ALT_MASK));
-	        menuItem.setActionCommand("quit");
 	        menuItem.addActionListener((event) -> {
-                exitWindow();
+              exitWindow();
 	        }); 
 	        menu.add(menuItem);
         }
