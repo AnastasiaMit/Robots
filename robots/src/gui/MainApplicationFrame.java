@@ -69,6 +69,8 @@ public class MainApplicationFrame extends JFrame {
         this.gameWin = gameWindow;
         addWindow(gameWindow);
 
+        setJMenuBar(generateMenuBar());
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         deserialisation();
         if (deserial) {
@@ -91,8 +93,6 @@ public class MainApplicationFrame extends JFrame {
                 } catch (PropertyVetoException e) {}
             }
 
-            setJMenuBar(generateMenuBar());
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
         }
 
     }

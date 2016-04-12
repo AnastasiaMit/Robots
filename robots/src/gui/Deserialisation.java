@@ -16,10 +16,13 @@ public class Deserialisation {
     public Rectangle bigWindow;
     public Rectangle logWindow;
     public Rectangle gameWindow;
+    public File file;
 
 
     public boolean findFile(){
-        File file = new File("C:\\Users\\анастасия\\Desktop\\robots\\src\\ser.txt");
+
+        this.file = new File(System.getProperty("user.home"), "ser.txt");
+
         if (file.exists() && file.isFile()) {
             return true;
         }
@@ -29,7 +32,7 @@ public class Deserialisation {
     public void readfromFile()
     {
         String str = "";
-        try(Scanner in = new Scanner(new File("C:\\Users\\анастасия\\Desktop\\robots\\src\\ser.txt")))
+        try(Scanner in = new Scanner(this.file))
         {
         while(in.hasNext())
 

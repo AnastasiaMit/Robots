@@ -5,6 +5,7 @@ import java.io.*;
 
 public class Serialisation
 {
+    public File serialFile;
     String serialString;
 
     public Serialisation(String serialString)
@@ -14,7 +15,8 @@ public class Serialisation
 
     public void SaveToFile()
     {
-        try(FileWriter writer = new FileWriter("C:\\Users\\анастасия\\Desktop\\robots\\src\\ser.txt", false))
+        this.serialFile = new File(System.getProperty("user.home"), "ser.txt");
+        try(FileWriter writer = new FileWriter(serialFile))
         {
             String text = serialString;
             writer.write(text);
