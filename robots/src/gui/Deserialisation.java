@@ -14,9 +14,11 @@ public class Deserialisation {
     public String iconBig;
     public boolean iconLog;
     public boolean iconGame;
+    public boolean iconCoord;
     public Rectangle bigWindow;
     public Rectangle logWindow;
     public Rectangle gameWindow;
+    public Rectangle coordWindow;
     public File file;
 
 
@@ -46,14 +48,18 @@ public class Deserialisation {
         }
 
         String[] data = str.split("\n");
-        String[] coords = data[3].split(" ");
+        System.out.print(data);
+        String[] coords = data[4].split(" ");
         iconBig = data[0];
         iconGame = Boolean.valueOf(data[1]);
         iconLog = Boolean.valueOf(data[2]);
+        iconCoord = Boolean.valueOf(data[3]);
         bigWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
-        coords = data[4].split(" ");
-        gameWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
         coords = data[5].split(" ");
+        gameWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
+        coords = data[6].split(" ");
         logWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
+        coords = data[7].split(" ");
+        coordWindow = new Rectangle(Integer.valueOf(coords[0]), Integer.valueOf(coords[1]), Integer.valueOf(coords[2]), Integer.valueOf(coords[3]));
 }
 }

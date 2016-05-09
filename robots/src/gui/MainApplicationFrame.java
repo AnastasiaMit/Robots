@@ -27,10 +27,14 @@ public class MainApplicationFrame extends JFrame {
     public String iconBig;
     public boolean iconGame;
     public boolean iconLog;
+    public boolean iconCoord;
     protected Rectangle positionGameWindow = new Rectangle();
     protected Rectangle positionLogWindow = new Rectangle();
     protected Rectangle positionBigWindow = new Rectangle();
+    protected Rectangle positionCoordWindow = new Rectangle();
+
     protected LogWindow logWin;
+    protected CoordWindow coordWindow;
     protected GameWindow gameWin;
     protected boolean deserial;
 
@@ -65,6 +69,10 @@ public class MainApplicationFrame extends JFrame {
         addWindow(logWindow);
         this.logWin = logWindow;
 
+        CoordWindow coordWindow = new CoordWindow();
+        coordWindow.setSize(300, 600);
+        this.coordWindow = coordWindow;
+        addWindow(coordWindow);
 
         GameWindow gameWindow = new GameWindow();
         gameWindow.setSize(600, 600);
@@ -92,6 +100,11 @@ public class MainApplicationFrame extends JFrame {
             if (iconLog) {
                 try {
                     logWindow.setIcon(true);
+                } catch (PropertyVetoException e) {}
+            }
+            if (iconCoord) {
+                try {
+                    coordWindow.setIcon(true);
                 } catch (PropertyVetoException e) {}
             }
 
@@ -131,14 +144,16 @@ public class MainApplicationFrame extends JFrame {
     protected void writePositions(){
         this.positionLogWindow = logWin.getBounds();
         this.positionGameWindow = gameWin.getBounds();
+        this.positionCoordWindow = coordWindow.getBounds();
     }
 
     public void serialisation() {
         writePositions();
-        String positions = positionBigWindow.x + " " + positionBigWindow.y + " " + positionBigWindow.width + " " + positionBigWindow.height + "\n" +
-                positionGameWindow.x + " " + positionGameWindow.y + " " + positionGameWindow.width + " " + positionGameWindow.height + "\n" +
-                positionLogWindow.x + " " + positionLogWindow.y + " " + positionLogWindow.width + " " + positionLogWindow.height;
-        String serialString = iconBig + "\n" + gameWin.isIcon() + "\n" + logWin.isIcon() + "\n" + positions;
+        String positions = positionBigWindow.x + " " + positionBigWindow.y + " " + positionBigWindow.width + " " + positionBigWindow.height + "\r\n" +
+                positionGameWindow.x + " " + positionGameWindow.y + " " + positionGameWindow.width + " " + positionGameWindow.height + "\r\n" +
+                positionLogWindow.x + " " + positionLogWindow.y + " " + positionLogWindow.width + " " + positionLogWindow.height + "\r\n" +
+                positionCoordWindow.x + " " + positionCoordWindow.y + " " + positionCoordWindow.width + " " + positionCoordWindow.height;
+        String serialString = iconBig + "\r\n" + gameWin.isIcon() + "\r\n" + logWin.isIcon() + "\r\n" + coordWindow.isIcon() + "\r\n" + positions;
         Serialisation ser = new Serialisation(serialString);
         ser.SaveToFile();
     }
@@ -150,9 +165,11 @@ public class MainApplicationFrame extends JFrame {
             iconBig = deserial.iconBig;
             iconGame = deserial.iconGame;
             iconLog = deserial.iconLog;
+            iconCoord = deserial.iconCoord;
             positionBigWindow = deserial.bigWindow;
             positionGameWindow = deserial.gameWindow;
             positionLogWindow = deserial.logWindow;
+            positionCoordWindow = deserial.coordWindow;
             this.deserial = true;
 
         }
