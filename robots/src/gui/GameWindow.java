@@ -7,11 +7,15 @@ import javax.swing.JPanel;
 
 public class GameWindow extends JInternalFrame
 {
-    private final GameVisualizer m_visualizer;
+    private VisualizerGame m_visualizer;
     public GameWindow() 
     {
-        super("Протокол работает", true, true, true, true);
-        m_visualizer = new GameVisualizer();
+        super("Новая игра", true, true, true, true);
+        m_visualizer = new VisualizerGame();
+        LookRobot observable = new LookRobot();
+        observable.addObserver(m_visualizer);
+        m_visualizer.run();
+
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);

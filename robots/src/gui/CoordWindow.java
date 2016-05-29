@@ -16,4 +16,5 @@ public class CoordWindow extends JInternalFrame
         getContentPane().add(panel);
         pack();
     }
+
 }
