@@ -38,7 +38,6 @@ public class MainApplicationFrame extends JFrame {
     protected GameWindow gameWin;
     protected boolean deserial;
 
-    //change
 
 
     public MainApplicationFrame() {
@@ -69,15 +68,18 @@ public class MainApplicationFrame extends JFrame {
         addWindow(logWindow);
         this.logWin = logWindow;
 
-        CoordWindow coordWindow = new CoordWindow();
-        coordWindow.setSize(300, 600);
-        this.coordWindow = coordWindow;
-        addWindow(coordWindow);
-
         GameWindow gameWindow = new GameWindow();
         gameWindow.setSize(600, 600);
         this.gameWin = gameWindow;
         addWindow(gameWindow);
+
+        LookRobot robot = gameWindow.getRobot();
+        CoordWindow coordWindow = new CoordWindow();
+        coordWindow.setSize(300, 600);
+        this.coordWindow = coordWindow;
+        coordWindow.update(robot);
+        addWindow(coordWindow);
+
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -137,6 +139,7 @@ public class MainApplicationFrame extends JFrame {
                 JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         if (sel == 0) {
             serialisation();
+
             Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }
@@ -282,3 +285,4 @@ public class MainApplicationFrame extends JFrame {
         }
     }
 }
+//обработка закрытий гл окном
