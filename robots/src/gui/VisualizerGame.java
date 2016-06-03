@@ -93,6 +93,7 @@ public class VisualizerGame extends JPanel  implements Observer
         this.robotDirection = model.get(2);
         this.robotCenterX = ComputePhisics.round(robotPositionX);
         this.robotCenterY = ComputePhisics.round(robotPositionY);
+
     }
 
 

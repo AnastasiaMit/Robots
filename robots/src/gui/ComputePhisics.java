@@ -1,8 +1,5 @@
 package gui;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.util.Observable;
 
 public class ComputePhisics {
 
@@ -14,7 +11,7 @@ public class ComputePhisics {
         return Math.sqrt(diffX * diffX + diffY * diffY);
     }
 
-    protected static double angleTo(double fromX, double fromY, double toX, double toY) //ok
+    protected static double angleTo(double fromX, double fromY, double toX, double toY)
     {
         double diffX = toX - fromX;
         double diffY = toY - fromY;
@@ -22,7 +19,7 @@ public class ComputePhisics {
         return asNormalizedRadians(Math.atan2(diffY, diffX));
     }
 
-    protected static double applyLimits(double value, double min, double max) //ok
+    protected static double applyLimits(double value, double min, double max)
     {
         if (value < min)
             return min;
@@ -30,7 +27,8 @@ public class ComputePhisics {
             return max;
         return value;
     }
-    protected static double asNormalizedRadians(double angle) //ok
+
+    protected static double asNormalizedRadians(double angle)
     {
         while (angle < 0)
         {
@@ -44,13 +42,16 @@ public class ComputePhisics {
     }
 
 
-
     protected static int round(double value)
     {
         return (int)(value + 0.5);
     }
 
-
+//    @Override
+//    public boolean equals(do v) {
+//        Vector vector = (Vector) v;
+//        return vector.x == this.x && vector.y == this.y && vector.z == this.z;
+//    }
 
 
 

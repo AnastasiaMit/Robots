@@ -48,7 +48,6 @@ public class Deserialisation {
         }
 
         String[] data = str.split("\n");
-        System.out.print(data);
         String[] coords = data[4].split(" ");
         iconBig = data[0];
         iconGame = Boolean.valueOf(data[1]);

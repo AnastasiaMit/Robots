@@ -114,11 +114,8 @@ public class MainApplicationFrame extends JFrame {
                     coordWindow.setIcon(true);
                 } catch (PropertyVetoException e) {}
             }
-
         }
-
     }
-
 
     public String frame__windowStateChanged(WindowEvent e) {
         if ((e.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED) {
