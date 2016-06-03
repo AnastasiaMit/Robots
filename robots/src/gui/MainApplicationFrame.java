@@ -45,7 +45,6 @@ public class MainApplicationFrame extends JFrame {
         addWindowStateListener(new WindowStateListener() {
             public void windowStateChanged(WindowEvent arg0) {
                 iconBig = frame__windowStateChanged(arg0);
-
             }
         });
 
@@ -81,14 +80,20 @@ public class MainApplicationFrame extends JFrame {
         addWindow(coordWindow);
 
 
+        addWindowListener(new WindowAdapter() {
+
+            public void windowClosing(WindowEvent e) {
+                exitWindow();}
+        });
         setJMenuBar(generateMenuBar());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         deserialisation();
         if (deserial) {
             setBounds(positionBigWindow);
             logWindow.setBounds(positionLogWindow);
             gameWindow.setBounds(positionGameWindow);
+            coordWindow.setBounds(positionCoordWindow);
             if (iconBig == "ICONIFIED") {
                 setState(Frame.ICONIFIED);
             }
@@ -113,6 +118,8 @@ public class MainApplicationFrame extends JFrame {
         }
 
     }
+
+
     public String frame__windowStateChanged(WindowEvent e) {
         if ((e.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED) {
             return ("ICONIFIED");
@@ -139,8 +146,7 @@ public class MainApplicationFrame extends JFrame {
                 JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         if (sel == 0) {
             serialisation();
-
-            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            dispose();
         }
     }
 
