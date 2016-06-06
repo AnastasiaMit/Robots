@@ -72,11 +72,12 @@ public class MainApplicationFrame extends JFrame {
         this.gameWin = gameWindow;
         addWindow(gameWindow);
 
-        LookRobot robot = gameWindow.getRobot();
-        CoordWindow coordWindow = new CoordWindow();
+
+        CoordWindow coordWindow = gameWindow.getCoordWin();
+
+
         coordWindow.setSize(300, 600);
         this.coordWindow = coordWindow;
-        coordWindow.update(robot);
         addWindow(coordWindow);
 
 

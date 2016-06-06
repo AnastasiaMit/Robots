@@ -1,24 +1,20 @@
 package gui;
 
 import javax.swing.*;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.awt.*;
+import java.util.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.util.Observable;
-import java.util.Observer;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.List;
+import java.util.Timer;
 
 
-
-public class VisualizerGame extends JPanel  implements Observer
+public class VisualizerGame extends JPanel implements Observer
 {
     volatile int targetPositionX;
     volatile int targetPositionY;
@@ -29,8 +25,11 @@ public class VisualizerGame extends JPanel  implements Observer
     volatile int robotCenterY;
 
 
-    LookRobot robot = new LookRobot();
 
+
+    volatile LookRobot robot = new LookRobot();
+
+    
     private final Timer m_timer = initTimer();
 
     private static Timer initTimer()
@@ -38,18 +37,16 @@ public class VisualizerGame extends JPanel  implements Observer
         Timer timer = new Timer("events generator", true);
         return timer;
     }
-    protected void run(){
+    public VisualizerGame() {
 
-        m_timer.schedule(new TimerTask()
-    {
+        m_timer.schedule(new TimerTask(){
         @Override
         public void run() {
             onRedrawEvent();}
     }, 0, 50);
 
 
-        m_timer.schedule(new TimerTask()
-    {
+        m_timer.schedule(new TimerTask(){
         @Override
         public void run()
         {
@@ -57,12 +54,10 @@ public class VisualizerGame extends JPanel  implements Observer
         }
     }, 0, 10);
 
-        addMouseListener(new MouseAdapter()
-        {
+        addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
                 setTargetPosition(e.getPoint());
-//                robot.updateModel(targetPositionX, targetPositionY);
                 repaint();
             }
         });
@@ -73,21 +68,13 @@ public class VisualizerGame extends JPanel  implements Observer
     {
         targetPositionX = p.x;
         targetPositionY = p.y;
-        robot.updateModel(targetPositionX, targetPositionY);
-    }
-
-    protected void onRedrawEvent()
-    {
-        EventQueue.invokeLater(this::repaint);
     }
 
 
-    @Override
-    public void update(Observable observable, Object arg)
+        public void update(Observable observable, Object arg)
     {
-        System.out.print(1);
-//        robot = (LookRobot) observable;
-        List<Double> model = robot.getModel();
+        List<Double> model = ( List<Double>)arg;
+        System.out.print(model);
         this.robotPositionX = model.get(0);
         this.robotPositionY = model.get(1);
         this.robotDirection = model.get(2);
@@ -96,10 +83,14 @@ public class VisualizerGame extends JPanel  implements Observer
 
     }
 
+    protected void onRedrawEvent()
+    {
+        EventQueue.invokeLater(this::repaint);
+    }
+
 
     private void drawRobot(Graphics2D g, int x, int y, double direction)
     {
-
         AffineTransform t = AffineTransform.getRotateInstance(direction, robotCenterX, robotCenterY);
         g.setTransform(t);
         g.setColor(Color.MAGENTA);
@@ -137,8 +128,7 @@ public class VisualizerGame extends JPanel  implements Observer
     @Override
     public void paint(Graphics g)
     {
-//        System.out.print(robotPositionX);
-//        System.out.print(robotPositionY);
+        robot.updateModel(targetPositionX, targetPositionY);
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g;
         drawRobot(g2d, ComputePhisics.round(robotPositionX), ComputePhisics.round(robotPositionY), robotDirection);

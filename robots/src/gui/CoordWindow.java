@@ -3,13 +3,14 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Arc2D;
-import java.util.*;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class CoordWindow extends JInternalFrame
+public class CoordWindow extends JInternalFrame implements Observer
 {
-    private double m_robotPosX;
-    private double m_robotPosY;
+    protected TextArea m_robotPosX;
+    protected TextArea m_robotPosY;
     private JLabel label;
 
 
@@ -25,11 +26,15 @@ public class CoordWindow extends JInternalFrame
         pack();
     }
 
-    public void update(LookRobot robot) {
-
-        java.util.List<Double> model = robot.getModel();
-        this.m_robotPosX = model.get(0);
-        this.m_robotPosY = model.get(1);
+    public void update(Observable observable, Object arg)
+    {
+        List<Double> model = ( List<Double>)arg;
+        TextArea x = new TextArea(model.get(0).toString());
+        TextArea y = new TextArea(model.get(1).toString());
+        this.m_robotPosX = x;
+        this.m_robotPosY = y;
+        m_robotPosX.invalidate();
+        m_robotPosY.invalidate();
 
     }
 

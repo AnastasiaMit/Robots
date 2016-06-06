@@ -1,13 +1,10 @@
 package gui;
 
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 
-public class LookRobot extends Observable {
+public class LookRobot extends Observable{
 
     private volatile double m_robotPositionX = 100;
     private volatile double m_robotPositionY = 100;
@@ -15,30 +12,11 @@ public class LookRobot extends Observable {
     private static final double maxVelocity = 0.1;
     private static final double maxAngularVelocity = 0.001;
 
-    private Observable myObservable = new Observable()
-    {
-        public void notifyObservers(Object arg) {
-            setChanged();
-            super.notifyObservers(arg);
-        }
-    };
-    public void addObserver(Observer o)
-    {
-        myObservable.addObserver(o);
-    }
 
-
-
-    protected List<Double> getModel(){
-        List<Double> model = Arrays.asList(m_robotPositionX, m_robotPositionY, m_robotDirection);
-        return  model;
-    }
     protected void updateModel(int m_targetPositionX, int m_targetPositionY){
-        myObservable.notifyObservers();
         double distance = ComputePhisics.distance(m_targetPositionX, m_targetPositionY,
                 m_robotPositionX, m_robotPositionY);
-        if (distance < 0.5)
-        {
+        if (distance < 0.5) {
             return;
         }
         double velocity = maxVelocity;
@@ -53,9 +31,8 @@ public class LookRobot extends Observable {
             angularVelocity = -maxAngularVelocity;
         }
 
-        moveRobot(velocity, angularVelocity, 10);
-        setChanged();
-        notifyObservers();
+        moveRobot(velocity, angularVelocity, 5);
+
 
     }
 
@@ -82,6 +59,8 @@ public class LookRobot extends Observable {
         m_robotPositionY = newY;
         double newDirection = ComputePhisics.asNormalizedRadians(m_robotDirection + angularVelocity * duration);
         m_robotDirection = newDirection;
+        setChanged();
+        notifyObservers(Arrays.asList(m_robotPositionX, m_robotPositionY, m_robotDirection));
     }
 
 

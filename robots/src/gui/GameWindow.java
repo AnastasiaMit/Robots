@@ -9,20 +9,24 @@ public class GameWindow extends JInternalFrame
 {
     private VisualizerGame m_visualizer;
     protected LookRobot robot;
+    protected CoordWindow coordWin;
     public GameWindow() 
     {
         super("Новая игра", true, true, true, true);
-        m_visualizer = new VisualizerGame();
         robot = new LookRobot();
-        robot.addObserver(m_visualizer);
-        m_visualizer.run();
+        m_visualizer = new VisualizerGame();
+        coordWin = new CoordWindow();
+        robot.addObserver(coordWin);
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
     }
-    protected LookRobot getRobot(){
-        return robot;
+
+
+    protected CoordWindow getCoordWin(){
+        return coordWin;
     }
+
 }
